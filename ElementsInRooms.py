@@ -40,8 +40,8 @@ class VentanasConPuntoDeComprobacion:
     def __init__(self, objetoVentana, puntoComprobacion1, puntoComprobacion2, puntoComprobacion3, puntoComprobacion4, roomEnContacto):
     	self.ObjetoVentana = objetoVentana
     	self.PuntoComprobacion1 = puntoComprobacion1
-		self.PuntoComprobacion2 = puntoComprobacion2
-  		self.PuntoComprobacion3 = puntoComprobacion3
+	self.PuntoComprobacion2 = puntoComprobacion2
+  	self.PuntoComprobacion3 = puntoComprobacion3
     	self.PuntoComprobacion4 = puntoComprobacion4
     	self.RoomEnContacto = roomEnContacto
 
@@ -105,19 +105,19 @@ for room in listaRoomsAplanadaLimpia:
 	for ventanaConPunto in listaVentanasConPunto:
 		parametroDestino = ventanaConPunto.ObjetoVentana.LookupParameter("Comentarios")
     
-		if room.IsPointInRoom(ventanaConPunto.puntoComprobacion1) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
+		if room.IsPointInRoom(ventanaConPunto.PuntoComprobacion1) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
 			parametroDestino.Set(nombreRoom)
    			VentanasConPuntoDeComprobacion.roomEnContacto = room
   
-		elif room.IsPointInRoom(ventanaConPunto.puntoComprobacion2) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
+		elif room.IsPointInRoom(ventanaConPunto.PuntoComprobacion2) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
 			parametroDestino.Set(nombreRoom)
    			VentanasConPuntoDeComprobacion.roomEnContacto = room
 		
-  		elif room.IsPointInRoom(ventanaConPunto.puntoComprobacion3) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
+  		elif room.IsPointInRoom(ventanaConPunto.PuntoComprobacion3) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
 			parametroDestino.Set(nombreRoom)
    			VentanasConPuntoDeComprobacion.roomEnContacto = room
 		
-  		elif room.IsPointInRoom(ventanaConPunto.puntoComprobacion4) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
+  		elif room.IsPointInRoom(ventanaConPunto.PuntoComprobacion4) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
 			parametroDestino.Set(nombreRoom)
    			VentanasConPuntoDeComprobacion.roomEnContacto = room
 
