@@ -38,12 +38,12 @@ uidoc = uiapp.ActiveUIDocument                              #Identificador de la
 
 class VentanasConPuntoDeComprobacion:
     def __init__(self, objetoVentana, puntoComprobacion1, puntoComprobacion2, puntoComprobacion3, puntoComprobacion4, roomEnContacto):
-    	self.ObjetoVentana = objetoVentana
-    	self.PuntoComprobacion1 = puntoComprobacion1
+		self.ObjetoVentana = objetoVentana
+		self.PuntoComprobacion1 = puntoComprobacion1
 		self.PuntoComprobacion2 = puntoComprobacion2
-  		self.PuntoComprobacion3 = puntoComprobacion3
-    	self.PuntoComprobacion4 = puntoComprobacion4
-    	self.RoomEnContacto = roomEnContacto
+		self.PuntoComprobacion3 = puntoComprobacion3
+		self.PuntoComprobacion4 = puntoComprobacion4
+		self.RoomEnContacto = roomEnContacto
 
 def ConversorUnidades(x): #Convierte las unidades del sistema imperial en metros
 	return UnitUtils.ConvertFromInternalUnits(x, DisplayUnitType.DUT_METERS)
@@ -78,23 +78,27 @@ allElementsInModel = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OS
 #SE OBTIENE EL PUNTO DE LOCALIZACIÓN DEL ELEMENTO
 listaVentanasConPunto = []
 for element in allElementsInModel:
-	#OBTENEMOS COMPONENTES X, Y, Z DEL PUNTO DE COLOCACIÓN DE LA INSTANCIA DE FAMILIA
-	ComponenteX = ConversorUnidades(element.Location.Point.X)
-	ComponenteY = ConversorUnidades(element.Location.Point.Y)
-	ComponenteZ = ConversorUnidades(element.Location.Point.Z)
-	d = 0.35
- 	#SUMAMOS UN DESFASE PARA GARANTIZAR QUE EL PUNTO ESTA DENTRO DE LA HABITACIÓN
- 	puntoComprobacion1 = XYZ(ComponenteX+d, ComponenteY+d, ComponenteZ+d)
-	puntoComprobacion2 = XYZ(ComponenteX+d, ComponenteY-d, ComponenteZ+d)
- 	puntoComprobacion3 = XYZ(ComponenteX-d, ComponenteY+d, ComponenteZ+d)
-	puntoComprobacion4 = XYZ(ComponenteX-d, ComponenteY-d, ComponenteZ+d)
- 	
-  #CREAMOS UNA LISTA CON LAS INSTANCIAS DE LA CLASE CREADA
-	listaVentanasConPunto.append(VentanasConPuntoDeComprobacion(element,puntoComprobacion1,puntoComprobacion2,puntoComprobacion3,puntoComprobacion4,0))
+	#FILTRAMOS FAMILIAS ANIDADAS POR SU NOMBRE (AÑADIR TODOS LOS NOMBRES DE FAMILIAS QUE NO QUEREMOS EVALUAR)
+	nombreElemento = element.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString()
+	if nombreElemento != "Tirador" and nombreElemento != "Manilla":
+		#OBTENEMOS COMPONENTES X, Y, Z DEL PUNTO DE COLOCACIÓN DE LA INSTANCIA DE FAMILIA
+	 	ComponenteX = ConversorUnidades(element.Location.Point.X)
+		ComponenteY = ConversorUnidades(element.Location.Point.Y)
+		ComponenteZ = ConversorUnidades(element.Location.Point.Z)
+		
+		d = 0.35
+	 	#SUMAMOS UN DESFASE PARA GARANTIZAR QUE EL PUNTO ESTA DENTRO DE LA HABITACIÓN
+		puntoComprobacion1 = XYZ(ComponenteX+d, ComponenteY+d, ComponenteZ+d)
+		puntoComprobacion2 = XYZ(ComponenteX+d, ComponenteY-d, ComponenteZ+d)
+		puntoComprobacion3 = XYZ(ComponenteX-d, ComponenteY+d, ComponenteZ+d)
+		puntoComprobacion4 = XYZ(ComponenteX-d, ComponenteY-d, ComponenteZ+d)
+	 	
+	  	#CREAMOS UNA LISTA CON LAS INSTANCIAS DE LA CLASE CREADA
+		listaVentanasConPunto.append(VentanasConPuntoDeComprobacion(element,puntoComprobacion1,puntoComprobacion2,puntoComprobacion3,puntoComprobacion4,0))
  	
   
-	roomCalculationPoint= []
-	roomCalculationPoint.append(element.get_Parameter(BuiltInParameter.ROOM_CALCULATION_POINT))
+	#roomCalculationPoint= []
+	#roomCalculationPoint.append(element.get_Parameter(BuiltInParameter.ROOM_CALCULATION_POINT))
 
 
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -104,23 +108,23 @@ for room in listaRoomsAplanadaLimpia:
 	nombreRoom = room.LookupParameter("Nombre").AsString()
 	for ventanaConPunto in listaVentanasConPunto:
 		parametroDestino = ventanaConPunto.ObjetoVentana.LookupParameter("Comentarios")
-    
-		if room.IsPointInRoom(ventanaConPunto.puntoComprobacion1) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
-			parametroDestino.Set(nombreRoom)
-   			VentanasConPuntoDeComprobacion.roomEnContacto = room
-  
-		elif room.IsPointInRoom(ventanaConPunto.puntoComprobacion2) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
-			parametroDestino.Set(nombreRoom)
-   			VentanasConPuntoDeComprobacion.roomEnContacto = room
 		
-  		elif room.IsPointInRoom(ventanaConPunto.puntoComprobacion3) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
+		if room.IsPointInRoom(ventanaConPunto.PuntoComprobacion1) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
 			parametroDestino.Set(nombreRoom)
-   			VentanasConPuntoDeComprobacion.roomEnContacto = room
+			VentanasConPuntoDeComprobacion.roomEnContacto = room
 		
-  		elif room.IsPointInRoom(ventanaConPunto.puntoComprobacion4) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
+		elif room.IsPointInRoom(ventanaConPunto.PuntoComprobacion2) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
 			parametroDestino.Set(nombreRoom)
-   			VentanasConPuntoDeComprobacion.roomEnContacto = room
+			VentanasConPuntoDeComprobacion.roomEnContacto = room
+		
+		elif room.IsPointInRoom(ventanaConPunto.PuntoComprobacion3) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
+			parametroDestino.Set(nombreRoom)
+			VentanasConPuntoDeComprobacion.roomEnContacto = room
+		
+		elif room.IsPointInRoom(ventanaConPunto.PuntoComprobacion4) and nombreRoom!="Terraza Cub." and nombreRoom!="Terraza Descub.":
+			parametroDestino.Set(nombreRoom)
+			VentanasConPuntoDeComprobacion.roomEnContacto = room
 
 TransactionManager.Instance.TransactionTaskDone()
 		
-OUT = listaRoomsAplanadaLimpia, allElementsInModel, listaVentanasConPunto
+OUT = listaRoomsAplanadaLimpia, allElementsInModel
