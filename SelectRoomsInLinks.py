@@ -51,4 +51,3 @@ for element in listaRoomsAplanada:
         listaRoomsAplanadaLimpia.append(element)
 		
 OUT = listaRoomsAplanadaLimpia
-
