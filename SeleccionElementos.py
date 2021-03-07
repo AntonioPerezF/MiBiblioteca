@@ -13,7 +13,7 @@ clr.ImportExtensions(Revit.GeometryConversion)
 clr.AddReference('RevitServices')       #Permite manejar los documentos y modificarlos a través del DocumentManager y el TransactionManager
 import RevitServices
 from RevitServices.Persistence import DocumentManager
-from RevistServices.Transactions import TransactionManager
+from RevitServices.Transactions import TransactionManager
 clr.AddReference('RevitAPI')            #Agrega las clases que se encuentran en el archivo dll de la API de Revit
 clr.AddReference('RevitAPIUI')          #Permite acceder a la interfaz de usuario desde la API
 import Autodesk
