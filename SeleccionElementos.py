@@ -32,7 +32,6 @@ categoria = UnwrapElement(IN[0])
 muros = FilteredElementCollector(doc).OfCategoryId(categoria.Id).WhereElementIsNotElementType().ToElements()
 
 
-
 #Selección de ejemplares y tipos por BuiltIn parameters (en este caso de categoria muros)
 collectorMuros = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Walls).ToElements()
 #Selección de los tipos por BuiltIn parameters (en este caso de categoria muros)

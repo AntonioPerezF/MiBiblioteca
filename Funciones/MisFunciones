@@ -1,0 +1,70 @@
+
+# Convierte las unidades del sistema imperial en metros
+def ConversorUnidadesMetros(x):   
+	return UnitUtils.ConvertFromInternalUnits(x, DisplayUnitType.DUT_METERS)
+
+# Convierte las unidades del sistema imperial en metros cuadrados
+def ConversorUnidadesMetrosCuadrados(x): 
+	return UnitUtils.ConvertFromInternalUnits(x, DisplayUnitType.DUT_SQUARE_METERS)
+
+# Convierte las unidades del sistema imperial en metros cubicos
+def ConversorUnidadesMetrosCubicos(x): 
+	return UnitUtils.ConvertFromInternalUnits(x, DisplayUnitType.DUT_CUBIC_METERS)
+
+# Convierte las unidades del sistema imperial en metros
+def ConversorUnidadesMetros2021(x): 
+	return UnitUtils.ConvertFromInternalUnits(x, UnitTypeId.DUT_METERS)
+
+# Convierte las unidades del sistema imperial en metros cuadrados
+def ConversorUnidadesMetrosCuadrados2021(x): 
+	return UnitUtils.ConvertFromInternalUnits(x, UnitTypeId.DUT_SQUARE_METERS)
+
+# Convierte las unidades del sistema imperial en metros cubicos
+def ConversorUnidadesMetrosCubicos2021(x): 
+	return UnitUtils.ConvertFromInternalUnits(x, UnitTypeId.DUT_CUBIC_METERS)
+
+# Devuelve el valor del parámetro sea cual sea su tipo
+def ValorParametro(parametro):
+	if parametro.StorageType == StorageType.String:
+		return parametro.AsString()
+	elif parametro.StorageType == StorageType.ElementId:
+		return doc.GetElement(parametro.AsElementId())
+	elif parametro.StorageType == StorageType.Double:
+		return parametro.AsDouble()
+	else:
+		return parametro.AsInteger()
+
+# Selecciona todos los elementos dentro de links de la categoria especificada en un input
+def SeleccionarElementosLinkados(categoria):
+	linkInstances = FilteredElementCollector(doc).OfClass(Autodesk.Revit.DB.RevitLinkInstance)
+ 	elementosEnLinks = []
+	for link in linkInstances:
+		if RevitLinkType.IsLoaded(doc, link.GetTypeId()):
+			linkDoc = link.GetLinkDocument()
+			elementosDeCategoria = FilteredElementCollector(doc).OfCategoryId(categoria.Id).WhereElementIsNotElementType().ToElements()
+			elementosEnLinks.append(elementosDeCategoria)
+		# Aplana la lista de elementos
+		flatten = []
+		for listaElementos in elementosEnLinks:
+			for elemento in listaElementos:
+				flatten.append(elemento)
+		# Limpia la lista de vacios y nulos
+		flattenLimpio = []
+		for element in flatten:
+			if element != "Empty List":
+				flattenLimpio.append(element)
+	return flattenLimpio
+
+def Aplana(lista):
+	flattenList = []
+	for sublista in lista:
+		for elemento in sublista:
+			flattenList.append(elemento)
+	return flattenList
+
+def Limpia(lista):
+	listaLimpia = []
+	for element in lista:
+		if element != "Empty List":
+			listaLimpia.append(element)
+	return listaLimpia
